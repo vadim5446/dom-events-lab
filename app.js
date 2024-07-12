@@ -1,12 +1,11 @@
 /*-------------------------------- Constants --------------------------------*/
-const numberButtons = document.querySelectorAll('[data-number]')
-const operationButtons = document.querySelectorAll('[data-operation]')
-const equalsButton = document.querySelector('[data-equals]')
-const deleteButton = document.querySelector('[data-delete]')
-const allClearButton = document.querySelector('[data-all-clear]')
+const numberButtons = document.querySelectorAll('.button number')
+const operationButtons = document.querySelectorAll('.button operator')
+const equalsButton = document.querySelector('.button equals')
 const previousOperandTextElement = document.querySelector('[data-previous-operand]')
 const currentOperandTextElement = document.querySelector('[data-current-operand]')
-const display = document.getElementById("display");
+const display = document.querySelector(".display");
+const calculator = document.querySelector('#calculator');
 /*-------------------------------- Variables --------------------------------*/
 let result=document.getElementById("inputext");
 
@@ -19,10 +18,9 @@ let currentInput = '';
 let previousInput = '';
 /*------------------------ Cached Element References ------------------------*/
 const displayElement = document.querySelector('.calculator-display');
-const numberButtons = document.querySelectorAll('.number');
-const operationButtons = document.querySelectorAll('.operation');
-const equalsButton = document.querySelector('.equals');
+
 const clearButton = document.querySelector('.clear');
+
 const decimalButton = document.querySelector('.decimal');
 /*----------------------------- Event Listeners -----------------------------*/
 numberButtons.forEach(button => {
@@ -32,33 +30,41 @@ numberButtons.forEach(button => {
     })
 })
 
-numberButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        calculator.chooseOperation(button.innerText)
-        calculator.updateDisplay()
-    })
-})
+calculator.addEventListener('click', (event) => {
+    // This log is for testing purposes to verify we're getting the correct value
+    // You have to click a button to see this log
+    // console.log(event.target.innerText);
+  
+    // Example
+    if (event.target.classList.contains('number')) {
+        display.innerText+=event.target.innerText // Do something with a number
+    console.log(eval(display.innerText))
+    }
 
-equalsButton.addEventListener('click', button => {
-    calculator.compute()
-    calculator.updateDisplay()
-})
-
-allClearButton.addEventListener('click', button => {
-    calculator.clear()
-    calculator.updateDisplay()
-})
-
-deleteButton.addEventListener('click', button => {
-    calculator.delete()
-    calculator.updateDisplay()
-})
+    // Example
+    if (event.target.innerText === '*') {
+       display.innerText+=event.target.innerText// Do something with this operator
+    }
+    if (event.target.innerText === '/') {
+        display.innerText+=event.target.innerText
+    }
+    if (event.target.innerText === '+') {
+        display.innerText+=event.target.innerText
+    }
+    if (event.target.innerText === '-') {
+        display.innerText+=event.target.innerText
+    }
+    if (event.target.innerText === '=') {
+        console.log(eval(display.innerText))
+        display.innerText=eval(display.innerText)
+    }
+  });
 /*-------------------------------- Functions --------------------------------*/
 function appendToDisplay(input){
     display.value += input;
 }
 
-chooseOperation(operation) {
+function chooseOperation(operation) {
     if (this.currentOperand === ' ') return
     if (this.previousOperand !== ' ') {
         this.getComputedStyle()
@@ -72,10 +78,3 @@ function clearDisplay(){
     display.value = "";
 }
 
-function calculate(){
-    try{
-        display.value = eval();
-    }
-    catch(error){
-        display.value = "Error";
-    }
